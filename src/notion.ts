@@ -1,4 +1,5 @@
 import { Client } from "@notionhq/client";
+import { fetchRedmineTickets} from "./redmine";
 
 const notion = new Client({ auth: process.env.NOTION_SECRET });
 const notionDbId = process.env.NOTION_DB_ID;
@@ -23,6 +24,21 @@ async function setupDatabase() {
   const database = await notion.databases.retrieve({ database_id: notionDbId });
   const properties = database.properties;
   console.log(JSON.stringify(properties, null, 2));
+
+  const linkPropertyExists = Object.values(properties).some(property => property.type === "url");
+
+  if (!linkPropertyExists) {
+    await notion.databases.update({
+      database_id: notionDbId,
+      properties: {
+        ...properties,
+        Url: {
+          name: "Link",
+          type: "url"
+        }
+      }
+    });
+  }
 
   const namePropertyExists = Object.values(properties).some(property => property.type === "title");
 
@@ -59,3 +75,35 @@ async function setupDatabase() {
   }
 
   await setupDatabase();
+
+
+  async function createDatabaseRecord(ticket: any) {
+    await notion.pages.create({
+      parent: { database_id: notionDbId },
+      properties: {
+        Name: {
+          title: [
+            { 
+              text: {
+                content: ticket.name
+              }
+            }
+          ]
+        },
+        Status: {
+          select: {
+            name: ticket.status
+          }
+        }
+      }
+    });
+  }
+
+  async function syncTickets() {
+    const tickets = await fetchRedmineTickets();
+    for (const ticket of tickets) {
+      await createDatabaseRecord(ticket);
+    }
+  }
+
+  await syncTickets();

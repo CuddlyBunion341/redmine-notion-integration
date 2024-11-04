@@ -10,12 +10,9 @@ const redmineApiKey = process.env.REDMINE_API_KEY;
 const redmineUrl = process.env.REDMINE_URL;
 
 async function fetchRedmineTickets() {
-  console.log(`${redmineUrl}/issues.json?key=${redmineApiKey}`)
   const response = await axios.get(`${redmineUrl}/issues.json?key=${redmineApiKey}`);
-  console.log(response.data);
   return response.data.issues.map((issue: any) => ({name: issue.subject, status: issue.status.name}));
 }
-
 
 // notion
 
@@ -28,7 +25,6 @@ async function logNotionDatabaseRecords() {
   await axios.get(url, {
     headers: {
       Authorization: `Bearer ${notionSecret}`,
-      // 'Notion-Version': '2021-05-13',
       "Notion-Version": "2022-06-28",
       "Content-Type": "application/json",
     },
