@@ -6,7 +6,7 @@ Synchronize Redmine issues with a Notion database to streamline task management 
 
 1. Clone the repository:
     ```bash
-    git clone <repository-url>
+    git clone git@github.com:CuddlyBunion341/redmine-notion-integration.git
     cd redmine-notion-integration
     ```
 
