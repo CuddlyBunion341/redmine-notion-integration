@@ -62,3 +62,7 @@ To periodically synchronize Redmine issues with Notion, you can set up a cron jo
     ```
 
 This will ensure that the synchronization script runs automatically at the specified interval.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
