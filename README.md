@@ -1,23 +1,8 @@
 # Redmine-Notion Integration
 
-## Purpose
-
-The purpose of this project is to integrate Redmine with Notion, allowing users to synchronize Redmine issues with Notion database columns. This integration helps in managing and tracking issues more efficiently by leveraging Notion's powerful database and collaboration features.
-
-## Motivation
-
-Managing tasks and issues across multiple platforms can be challenging and time-consuming. By integrating Redmine with Notion, this project aims to streamline the workflow, reduce manual data entry, and ensure that all team members have access to up-to-date information in a single place. This integration enhances productivity and collaboration within teams.
+Synchronize Redmine issues with a Notion database to streamline task management and enhance team productivity.
 
 ## Setup
-
-### Prerequisites
-
-- [Bun](https://bun.sh) (v1.1.29 or later)
-- Node.js (if not using Bun)
-- Redmine API key
-- Notion API key
-
-### Installation
 
 1. Clone the repository:
     ```bash
@@ -43,6 +28,11 @@ Managing tasks and issues across multiple platforms can be challenging and time-
     NOTION_SECRET=<your notion secret>
     ```
 
+5. Run the synchronization script:
+    ```bash
+    bun run index.ts
+    ```
+
 ### Acquiring API Keys
 
 - **Redmine API Key**: 
@@ -56,3 +46,19 @@ Managing tasks and issues across multiple platforms can be challenging and time-
   2. Create a new integration.
   3. Save the generated "Internal Integration Token".
   4. Share the database with your integration to get the `NOTION_DB_ID`.
+
+### Automating Synchronization
+
+To periodically synchronize Redmine issues with Notion, you can set up a cron job:
+
+1. Open your crontab file:
+    ```bash
+    crontab -e
+    ```
+
+2. Add a new cron job to run the script at your desired interval (e.g., every hour):
+    ```cron
+    0 * * * * cd /path/to/redmine-notion-integration && bun run index.ts
+    ```
+
+This will ensure that the synchronization script runs automatically at the specified interval.
