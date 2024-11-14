@@ -1,20 +1,16 @@
 import axios from 'axios';
 
-
 const redmineApiKey = process.env.REDMINE_API_KEY;
-const redmineUrl = process.env.REDMINE_URL;
+const redmineBaseUrl = process.env.REDMINE_URL;
 
-type RedmineTicket = {
-  name: string;
-  status: string;
-  link: string;
-};
+const issueQuery = "assigned_to_id=me&status_id=open"; 
 
-function displayLink(subject: string, id: number) {
-  return `[${subject}](https://redmine.renuo.ch/issues/${id})`;
-} 
+export async function fetchStatuses() {
+  const response = await axios.get(`${redmineBaseUrl}/issue_statuses.json?key=${redmineApiKey}`);
+  return response.data.issue_statuses as IssueStatus[];
+}
 
-export async function fetchRedmineTickets() {
-  const response = await axios.get(`${redmineUrl}/issues.json?key=${redmineApiKey}`);
-  return response.data.issues.map((issue: any) => ({name: issue.subject, link: displayLink(issue.subject, issue.number), status: issue.status.name}));
+export async function fetchIssues() {
+  const response = await axios.get(`${redmineBaseUrl}/issues.json?key=${redmineApiKey}&${issueQuery}`);
+  return response.data.issues as Issue[];
 }
