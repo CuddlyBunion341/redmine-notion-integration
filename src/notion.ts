@@ -32,10 +32,7 @@ export function createColumn(columnName: string, options: NotionSelectOption[] =
 export function fetchColumnOptions(columnName: string) {
   return notion.databases.retrieve({ database_id: notionDbId })
   .then(response => {
-    console.log(Object.keys(response.properties))
-    console.log(columnName)
     const property = response.properties[columnName];
-    console.log(property)
     return property.multi_select.options as NotionSelectOption[];
   });
 }

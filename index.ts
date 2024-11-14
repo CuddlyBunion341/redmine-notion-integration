@@ -12,4 +12,16 @@ if (!hasColumn(columnName)) {
   await createColumn(columnName, []);
 }
 
-console.log(await fetchColumnOptions(columnName));
+const columnOptions = await fetchColumnOptions(columnName);
+const redmineIssues = await fetchRedmineIssues();
+
+const redmineNotionOptions = redmineIssues.map(({ id, name, formattedUrl }) => ({
+  name: `${name} ${formattedUrl}`,
+  color: 'gray'
+}));
+
+const newColumnOptions = columnOptions.concat(redmineNotionOptions);
+
+await updateColumnOptions(columnName, newColumnOptions);
+
+console.log('Updated column options!');
