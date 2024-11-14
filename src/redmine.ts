@@ -1,16 +1,23 @@
-import axios from 'axios';
+import { redmineBaseUrl, fetchIssues } from "./redmine_api.ts"
 
-const redmineApiKey = process.env.REDMINE_API_KEY;
-const redmineBaseUrl = process.env.REDMINE_URL;
-
-const issueQuery = "assigned_to_id=me&status_id=open"; 
-
-export async function fetchStatuses() {
-  const response = await axios.get(`${redmineBaseUrl}/issue_statuses.json?key=${redmineApiKey}`);
-  return response.data.issue_statuses as IssueStatus[];
+export type RedmineIssue = {
+  id: number
+  name: string
+  url: string
+  formattedUrl: string
 }
 
-export async function fetchIssues() {
-  const response = await axios.get(`${redmineBaseUrl}/issues.json?key=${redmineApiKey}&${issueQuery}`);
-  return response.data.issues as Issue[];
+function issueUrl(id: number) {
+  return `${redmineBaseUrl}/issues/${id}`
+}
+
+export async function fetchRedmineIssues() {
+  const issues = await fetchIssues()
+
+  return issues.map(({id, subject}) => ({
+    id,
+    name: subject,
+    url: issueUrl(id),
+    formattedUrl: `[TICKET-${id}](${issueUrl(id)})`
+  }))
 }
