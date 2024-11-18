@@ -8,7 +8,7 @@ config();
 
 const columnName = process.env.NOTION_REDMINE_TICKET_COLUMN_NAME;
 
-if (!hasColumn(columnName)) {
+if (!await hasColumn(columnName)) {
   await createColumn(columnName, []);
 }
 

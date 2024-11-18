@@ -18,9 +18,9 @@ export function randomNotionColor() {
 }
 
 export function hasColumn(columnName: string) {
-  return notion.databases.retrieve({ database_id: notionDbId })
-  .then(response => {
-    return columnName in response.properties;
+  notion.databases.retrieve({ database_id: notionDbId })
+  .then(response =>  {
+    return columnName in response.properties
   });
 }
 
